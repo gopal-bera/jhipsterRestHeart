@@ -1,0 +1,33 @@
+{
+  "changelogDate": "20250129102632",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "phoneNo",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "percentage",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "course",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Student",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

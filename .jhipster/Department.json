@@ -1,0 +1,20 @@
+{
+  "changelogDate": "20250129102855",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "university",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Department",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}
