@@ -4,21 +4,16 @@ import java.io.Serializable;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mycompany.myapp.json.ObjectIdToStringDeserializer;
 import com.mycompany.myapp.json.StringToObjectIdSerializer;
 
-import lombok.Data;
-
 /**
  * A Student.
  */
 @Document(collection = "student")
-@Data
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;

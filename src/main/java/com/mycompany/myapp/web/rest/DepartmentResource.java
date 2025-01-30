@@ -102,8 +102,8 @@ public class DepartmentResource {
     @GetMapping("/departments/{id}")
     public ResponseEntity<Department> getDepartment(@PathVariable String id) {
         log.debug("REST request to get Department : {}", id);
-        Optional<Department> department = departmentService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(department);
+        ResponseEntity<Department> department = departmentService.findOne(id);
+        return department;
     }
 
     @DeleteMapping("/departments/{id}")

@@ -1,30 +1,21 @@
 package com.mycompany.myapp.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mycompany.myapp.json.ObjectIdToStringDeserializer;
 import com.mycompany.myapp.json.StringToObjectIdSerializer;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 
 
 @Document(collection = "department")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@JsonInclude(Include.NON_NULL)
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +33,7 @@ public class Department implements Serializable {
     private String university;
 
     @Field("student")
-    private RefType student;
+    List<RefType> student = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -86,12 +77,17 @@ public class Department implements Serializable {
     }
 
 
-    public RefType getStudent(){
+    public List<RefType> getStudent(){
         return this.student;
     }
 
-    public RefType setStudent(RefType student){
-        return this.student = student;
+    public Department addStudents(RefType refType) {
+        this.student.add(refType);
+        return this;
+    }
+
+    public void setStudent(List<RefType> student){
+        this.student = student;
     }
 
 

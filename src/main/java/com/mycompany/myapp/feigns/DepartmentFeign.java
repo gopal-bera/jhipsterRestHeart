@@ -2,7 +2,6 @@ package com.mycompany.myapp.feigns;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public interface DepartmentFeign {
     public ResponseEntity<List<Department>> getAll();
 
     @GetMapping("/department/{id}")
-    public Optional<Department> getDeptById(@PathVariable("id") String id);
+    public ResponseEntity<Department> getDeptById(@PathVariable("id") String id);
 
     @PutMapping("/department/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Department department);

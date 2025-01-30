@@ -69,7 +69,7 @@ public class DepartmentService {
     }
 
     
-    public Optional<Department> findOne(String id) {
+    public ResponseEntity<Department> findOne(String id) {
         log.debug("Request to get Department : {}", id);
         return departmentFeign.getDeptById(id);
         // return departmentRepository.findById(id);

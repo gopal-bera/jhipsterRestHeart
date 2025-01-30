@@ -1,6 +1,11 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Department;
+import com.mycompany.myapp.domain.RefType;
 import com.mycompany.myapp.domain.Student;
+import com.mycompany.myapp.domain.RefType.RefTo;
+import com.mycompany.myapp.feigns.DepartmentFeign;
+import com.mycompany.myapp.feigns.StudentFeign;
 import com.mycompany.myapp.repository.StudentRepository;
 import com.mycompany.myapp.service.StudentService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -8,6 +13,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,10 +38,15 @@ public class StudentResource {
     private final StudentService studentService;
 
     private final StudentRepository studentRepository;
+    private final StudentFeign studentFeign;
+    private final DepartmentFeign departmentFeign;
 
-    public StudentResource(StudentService studentService, StudentRepository studentRepository) {
+
+    public StudentResource(StudentService studentService, StudentRepository studentRepository, StudentFeign studentFeign, DepartmentFeign departmentFeign) {
         this.studentService = studentService;
         this.studentRepository = studentRepository;
+        this.studentFeign = studentFeign;
+        this.departmentFeign = departmentFeign;
     }
 
     @PostMapping("/students")
@@ -111,5 +123,24 @@ public class StudentResource {
         log.debug("REST request to delete Student : {}", id);
         studentService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+    }
+
+
+    @PostMapping("/departments/{deptId}/student")
+    public ResponseEntity<?> addStudentToDepartment(@PathVariable String deptId, @RequestBody Student student)throws URISyntaxException {
+        
+        log.debug("request to add student {} to departmentId {}", student, deptId);
+        student.setId(new ObjectId().toHexString());
+        student.setDepartment(new RefType( new ObjectId(deptId).toHexString(), RefTo.Department));
+
+        ResponseEntity<Void> addStudentToDepartment = studentFeign.save(student);
+        String location = addStudentToDepartment.getHeaders().get("Location").get(0);
+        String studentId = location.substring(location.lastIndexOf("/")+1);
+
+        ResponseEntity<Department> byId = departmentFeign.getDeptById(deptId);
+        Department department = byId.getBody();
+        department.getStudent().add(new RefType( new ObjectId(studentId).toHexString(), RefTo.Student));
+        departmentFeign.update(deptId, department);
+        return addStudentToDepartment;
     }
 }
