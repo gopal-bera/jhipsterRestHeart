@@ -1,10 +1,16 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.CreateInfo;
 import com.mycompany.myapp.domain.Department;
+import com.mycompany.myapp.domain.RefType;
+import com.mycompany.myapp.domain.RefType.RefTo;
+import com.mycompany.myapp.domain.UpdateInfo;
 import com.mycompany.myapp.repository.DepartmentRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.DepartmentService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -33,10 +41,13 @@ public class DepartmentResource {
     private final DepartmentService departmentService;
 
     private final DepartmentRepository departmentRepository;
+    private final UserRepository userRepository;
 
-    public DepartmentResource(DepartmentService departmentService, DepartmentRepository departmentRepository) {
+
+    public DepartmentResource(DepartmentService departmentService, DepartmentRepository departmentRepository, UserRepository userRepository) {
         this.departmentService = departmentService;
         this.departmentRepository = departmentRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/departments")
@@ -45,6 +56,22 @@ public class DepartmentResource {
         if (department.getId() != null) {
             throw new BadRequestAlertException("A new department cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        department.setCreateInfo(CreateInfo.builder()
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .createdDate(Instant.now())
+                .build());
+
+        department.setUpdateInfo(UpdateInfo.builder()
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .lastModifiedDate(Instant.now())
+                .build());
+
+
         ResponseEntity<Void> save = departmentService.save(department);
         return save;
     }

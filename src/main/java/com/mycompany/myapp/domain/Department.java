@@ -7,15 +7,27 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mycompany.myapp.json.ObjectIdToStringDeserializer;
 import com.mycompany.myapp.json.StringToObjectIdSerializer;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 
 @Document(collection = "department")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonInclude(Include.NON_NULL)
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,6 +102,27 @@ public class Department implements Serializable {
         this.student = student;
     }
 
+    @Field("create_info")
+    private CreateInfo createInfo;
+
+    @Field("update_info")
+    private UpdateInfo updateInfo;
+
+    public CreateInfo getCreateInfo() {
+        return createInfo;
+    }
+
+    public void setCreateInfo(CreateInfo createInfo) {
+        this.createInfo = createInfo;
+    }
+
+    public UpdateInfo getUpdateInfo() {
+        return updateInfo;
+    }
+
+    public void setUpdateInfo(UpdateInfo updateInfo) {
+        this.updateInfo = updateInfo;
+    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
