@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,15 @@ public interface StudentFeign {
     public ResponseEntity<Void> save(@RequestBody Student student);
 
     @PutMapping("/student/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") String id, @RequestBody Student student);
+    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody Student student);
 
     @GetMapping("/student")
     public ResponseEntity<List<Student>> getAll();
 
     @GetMapping("/student/{id}")
     public Optional<Student> getStudentById(@PathVariable("id") String id);
+
+    @DeleteMapping("/student/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") String id);
 
 }

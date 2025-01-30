@@ -36,17 +36,13 @@ public class DepartmentService {
     }
 
     
-    public Department update(Department department) {
+    public ResponseEntity<Void> update(String id, Department department) {
         log.debug("Request to save Department : {}", department);
-        return departmentRepository.save(department);
+        return departmentFeign.update(id, department);
+        // return departmentRepository.save(department);
     }
 
-    /**
-     * Partially update a department.
-     *
-     * @param department the entity to update partially.
-     * @return the persisted entity.
-     */
+    
     public Optional<Department> partialUpdate(Department department) {
         log.debug("Request to partially update Department : {}", department);
 
@@ -65,34 +61,24 @@ public class DepartmentService {
             .map(departmentRepository::save);
     }
 
-    /**
-     * Get all the departments.
-     *
-     * @return the list of entities.
-     */
-    public List<Department> findAll() {
+
+    public ResponseEntity<List<Department>> findAll() {
         log.debug("Request to get all Departments");
-        return departmentRepository.findAll();
+        return departmentFeign.getAll();
+        // return departmentRepository.findAll();
     }
 
-    /**
-     * Get one department by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
+    
     public Optional<Department> findOne(String id) {
         log.debug("Request to get Department : {}", id);
-        return departmentRepository.findById(id);
+        return departmentFeign.getDeptById(id);
+        // return departmentRepository.findById(id);
     }
 
-    /**
-     * Delete the department by id.
-     *
-     * @param id the id of the entity.
-     */
+  
     public void delete(String id) {
         log.debug("Request to delete Department : {}", id);
-        departmentRepository.deleteById(id);
+        // departmentRepository.deleteById(id);
+        departmentFeign.delete(id);
     }
 }

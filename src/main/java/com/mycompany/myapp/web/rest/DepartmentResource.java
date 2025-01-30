@@ -51,7 +51,7 @@ public class DepartmentResource {
 
 
     @PutMapping("/departments/{id}")
-    public ResponseEntity<Department> updateDepartment(
+    public ResponseEntity<?> updateDepartment(
         @PathVariable(value = "id", required = false) final String id,
         @RequestBody Department department
     ) throws URISyntaxException {
@@ -59,19 +59,12 @@ public class DepartmentResource {
         if (department.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, department.getId())) {
+        if (!id.equals(department.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!departmentRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Department result = departmentService.update(department);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, department.getId()))
-            .body(result);
+        ResponseEntity<Void> result = departmentService.update(id, department);
+        return result;
     }
 
   
@@ -101,7 +94,7 @@ public class DepartmentResource {
     }
 
     @GetMapping("/departments")
-    public List<Department> getAllDepartments() {
+    public ResponseEntity<List<Department>> getAllDepartments() {
         log.debug("REST request to get all Departments");
         return departmentService.findAll();
     }

@@ -50,16 +50,16 @@ public class StudentResource {
     
     @PutMapping("/students/{id}")
     public ResponseEntity<?> updateStudent(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) String id,
         @RequestBody Student student
     ) throws URISyntaxException {
         log.debug("REST request to update Student : {}, {}", id, student);
         
-        // if id not given then it will take as new doc
-        // if (student.getId() == null) {
-        //     throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        // }
-        if (!Objects.equals(id, student.getId())) {
+        // if id n/ot given then it will take as new doc
+        if (student.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!id.equals(student.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 

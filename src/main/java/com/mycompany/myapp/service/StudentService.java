@@ -83,13 +83,10 @@ public class StudentService {
         return studentFeign.getStudentById(id);
     }
 
-    /**
-     * Delete the student by id.
-     *
-     * @param id the id of the entity.
-     */
+  
     public void delete(String id) {
         log.debug("Request to delete Student : {}", id);
-        studentRepository.deleteById(id);
+        studentFeign.delete(id);
+        // studentRepository.deleteById(id);
     }
 }
