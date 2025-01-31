@@ -24,6 +24,7 @@ public class MongoDbTestContainer implements InitializingBean, DisposableBean {
         }
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void afterPropertiesSet() {
         if (null == mongodbContainer) {

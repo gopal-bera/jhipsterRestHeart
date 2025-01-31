@@ -1,6 +1,5 @@
 package com.mycompany.myapp;
 
-import com.mycompany.myapp.JhipsterRestHeartApp;
 import com.mycompany.myapp.config.EmbeddedMongo;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

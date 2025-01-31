@@ -1,6 +1,6 @@
 package com.mycompany.myapp.domain;
 
-import java.time.Instant;
+import java.time.Instant;                                           
 
 import org.springframework.data.mongodb.core.mapping.Field;
 

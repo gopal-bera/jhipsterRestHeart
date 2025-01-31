@@ -53,9 +53,7 @@ public class DepartmentResource {
     @PostMapping("/departments")
     public ResponseEntity<?> createDepartment(@RequestBody Department department) throws URISyntaxException {
         log.debug("REST request to save Department : {}", department);
-        if (department.getId() != null) {
-            throw new BadRequestAlertException("A new department cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
