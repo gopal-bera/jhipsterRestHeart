@@ -149,7 +149,7 @@ public class StudentResource {
     }
 
 
-    @PostMapping("/departments/{deptId}/student")
+    @PostMapping("/students/{deptId}/student")
     public ResponseEntity<?> addStudentToDepartment(@PathVariable String deptId, @RequestBody Student student)throws URISyntaxException {
         
         log.debug("request to add student {} to departmentId {}", student, deptId);
