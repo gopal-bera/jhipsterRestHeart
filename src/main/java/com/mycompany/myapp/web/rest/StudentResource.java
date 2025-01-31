@@ -153,6 +153,20 @@ public class StudentResource {
     public ResponseEntity<?> addStudentToDepartment(@PathVariable String deptId, @RequestBody Student student)throws URISyntaxException {
         
         log.debug("request to add student {} to departmentId {}", student, deptId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        student.setCreateInfo(CreateInfo.builder()
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .createdDate(Instant.now())
+                .build());
+
+        student.setUpdateInfo(UpdateInfo.builder()
+                .user(new RefType(userRepository.findOneByLogin(currentPrincipalName).get().getId(), RefTo.User))
+                .lastModifiedDate(Instant.now())
+                .build());
+
         student.setId(new ObjectId().toHexString());
         student.setDepartment(new RefType( new ObjectId(deptId).toHexString(), RefTo.Department));
 
